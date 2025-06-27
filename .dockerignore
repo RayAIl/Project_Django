@@ -1,4 +1,7 @@
 .venv/
 .idea/
+.mypy_cache/
 __pychache__/
 migrations/
+app/__pycache__/
+main/__pycache__/

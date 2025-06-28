@@ -1,10 +1,15 @@
 from django.contrib import admin
-from .models import Size, Category, ClothingItem, ClothingItemSize
+from .models import Size, Category, ClothingItem, \
+    ClothingItemSize, ItemImage
 
 # Register your models here.
 
 class ClothingItemSizeInline(admin.TabularInline):
     model = ClothingItemSize
+    extra = 4
+
+class ItemImageInline(admin.TabularInline):
+    model = ItemImage
     extra = 4
 
 @admin.register(Size)
@@ -25,4 +30,4 @@ class ClothingItemAdmin(admin.ModelAdmin):
     list_filter = ('available', 'category')
     prepopulated_fields = {'slug': ('name',)}
     ordering = ('-created_at',) 
-    inlines = [ClothingItemSizeInline]
+    inlines = [ClothingItemSizeInline, ItemImageInline]

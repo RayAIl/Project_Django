@@ -14,9 +14,9 @@
 </head>
 <body>
     <header class="header sticky-top d-flex align-items-center">
-        <div class="header-logo">
+        <a class="header-logo" href="{% url 'main:catalog' %}">
             <img src="{% static 'img/rev.png' %}" alt="Logo">
-        </div>
+        </a>
         <div class="search">
             <form action="" id="search_form" class="search_form" style="display: none;">
                 <input type="text" name="q" class="form_input" placeholder="Search">

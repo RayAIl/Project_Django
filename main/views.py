@@ -47,7 +47,7 @@ class ClothingItemDetailView(DetailView):
     slug_field = 'slug'
     slug_url_kwarg = 'slug'
 
-    def def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         clothing_item = self.object 
         available_sizes = ClothingItemSize.objects.filter(clothing_item=clothing_item, available=True)

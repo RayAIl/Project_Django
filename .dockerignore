@@ -5,3 +5,5 @@ __pychache__/
 migrations/
 app/__pycache__/
 main/__pycache__/
+cart/__pycache__/
+users/__pycache__/

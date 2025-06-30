@@ -44,8 +44,8 @@ def CartUpdateView(View):
         cart = Cart(request)
         quantity = redirect.POST.get('quantity')
         try:
-            quantity < 1:
-            quantity = 1
+            if quantity < 1:
+                quantity = 1
         except ValueError:
             quantity = 1
         clothing_item = get_object_or_404(ClothingItem, id=item_id)

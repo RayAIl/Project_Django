@@ -24,7 +24,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     city = models.CharField(max_length=30, blank=True)
     street = models.CharField(max_length=30, blank=True)
     house_number = models.CharField(max_length=10, blank=True)
-    appartment_number = models.CharField(max_length=10, blank=True)
+    apartment_number = models.CharField(max_length=10, blank=True)
     postal_code = models.CharField(max_length=10, blank=True)
     is_active = models.CharField(default=True)
     is_staff = models.CharField(default=False)

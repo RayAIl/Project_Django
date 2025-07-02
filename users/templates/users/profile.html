@@ -1,0 +1,42 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block title %}Reverence Interlude - Profile{% endblock title %}
+
+{% block content %}
+    <h1 class="text-center mb-5">Order history</h1>
+    <div class="profile d-flex flex-column gap-4 justify-content-center">
+        <div class="profile-history">
+            <div class="table-head d-flex justify-content-between align-items-center">
+                <div class="left-side-head">
+                    <p class="table-p">Product</p>
+                </div>
+                <div class="right-side-head d-flex gap-3">
+                    <p class="table-p c-item-total">Product</p>
+                    <p class="table-p c-item-quantity">Quantity</p>
+                    <p class="table-p c-item-price">Total</p>
+                </div>
+            </div>
+            <div class="table-items">
+                {% if order|length == 0 %}
+                    <div class="empty-orders-message text-center">
+                        <h3 class="mt-5">You have no orders.</h3>
+                    </div>
+                {% else %}
+                    {% for order in orders %}
+                        Order №{{ order.id }}
+                        {% for item in order.items.all %}
+                            <div class="order-item d-flex justify-content-between align-items-center">
+                                <div class="left-side-items d-flex">
+                                    <div class="c-item-img">
+                                        <img src="{{ item.clothing_item.image.url }}" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

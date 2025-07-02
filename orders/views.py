@@ -3,10 +3,11 @@ import stripe
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from .forms import OrderForm
-from .models import OrderItem, Order
 from cart.cart import Cart
 from main.models import Size
+from .forms import OrderForm
+from .models import OrderItem, Order
+
 
 
 stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
@@ -57,7 +58,7 @@ def order_create(request):
                     } for item in cart
                     ],
                     mode='payment',
-                    success_url='http//localhost:8000/orders/completed'
+                    success_url='http//localhost:8000/orders/completed',
                     cancel_url='http//localhost:8000/orders/create'
                 )
                 return redirect(session.url, code=303)
@@ -68,7 +69,7 @@ def order_create(request):
                     'cart': cart,
                     'error': str(ex),
                 })
-    from = OrderForm(initial= {
+    form = OrderForm(initial= {
         'first_name': request.user.first_name,
         'last_name': request.user.last_name,
         'middle_name': request.user.middle_name,

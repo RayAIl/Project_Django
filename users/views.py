@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm, UserLoginForm, UserProfileForm
+from orders.models import Order
 
 
 def register(request):
@@ -35,3 +36,20 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('users:login')
+
+@login_required(login_url="/users/login")
+def profile(request):
+    user = request.user
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('users:profile')
+    else:
+        form = UserProfileForm(user=user)
+    orders = Order.objects.filter(user=user)
+
+    return render(request, 'users/profile.html', {
+        'form': form,
+        'orders': orders,
+    })

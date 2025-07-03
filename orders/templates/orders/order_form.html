@@ -52,7 +52,7 @@
                             </form>
                         </div>
                         <div class="c-item-total">
-                            ${{ item.total_price | floatformat:2 }}
+                            ${{ item.total_price|floatformat:2 }}
                         </div>
                     </div>
                 </div>
@@ -64,19 +64,23 @@
         <div class="form-for-order">
             <form method="post" class="d-flex gap-5">
                 {% csrf_token %}
-                    <div class="form-blocks">
-                        <div class="block1 d-flex flex-column gap-1">
-                            {{ form.first_name.label_tag }} {{ form.first_name }}<br />
-                            {{ form.last_name.label_tag }} {{ form.last_name }}<br />
-                            {{ form.middle_name.label_tag }} {{ form.middle_name }}<br />
-                            {{ form.city.label_tag }} {{ form.city }}<br />
-                            {{ form.street.label_tag }} {{ form.street }}<br />
-                            {{ form.house_number.label_tag }} {{ form.house_number }}<br />
-                            {{ form.apartment_number.label_tag }} {{ form.apartment_number }}<br />
-                            {{ form.postal_code.label_tag }} {{ form.postal_code }}<br />
-                        </div>
+                <div class="form-blocks">
+                    <div class="block1 d-flex flex-column gap-1">
+                        {{ form.first_name.label_tag }} {{ form.first_name }}<br>
+                        {{ form.last_name.label_tag }} {{ form.last_name }}<br>
+                        {{ form.middle_name.label_tag }} {{ form.middle_name }}<br>
+                        {{ form.city.label_tag }} {{ form.city }}<br>
+                        {{ form.street.label_tag }} {{ form.street }}<br>
+                        {{ form.house_number.label_tag }} {{ form.house_number }}<br>
+                        {{ form.apartment_number.label_tag }} {{ form.apartment_number }}<br>
+                        {{ form.postal_code.label_tag }} {{ form.postal_code }}<br>
                     </div>
-                    <button class="default-btn order-form-btn">Place Order</button>
+                    <div class="block2 d-flex flex-column gap-1">
+                        {{ form.apartment_number.label_tag }} {{ form.apartment_number }}<br>
+                        {{ form.postal_code.label_tag }} {{ form.postal_code }}<br>
+                    </div>
+                </div>
+                <button class="default-btn order-form-btn">Place Order</button>
             </form>
         </div>
         {% endif %}

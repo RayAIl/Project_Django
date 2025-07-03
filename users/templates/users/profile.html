@@ -24,19 +24,58 @@
                     </div>
                 {% else %}
                     {% for order in orders %}
-                        Order №{{ order.id }}
-                        {% for item in order.items.all %}
-                            <div class="order-item d-flex justify-content-between align-items-center">
-                                <div class="left-side-items d-flex">
-                                    <div class="c-item-img">
-                                        <img src="{{ item.clothing_item.image.url }}" alt="">
+                        <div class="order">
+                            Order №{{ order.id }}
+                            {% for item in order.items.all %}
+                                <div class="order-item d-flex justify-content-between align-items-center">
+                                    <div class="left-side-items d-flex">
+                                        <div class="c-item-img">
+                                            <img src="{{ item.clothing_item.image.url }}" alt="">
+                                        </div>
+                                        <div class="c-item-quantity">
+                                            1
+                                        </div>
+                                        <div class="c-item-total">
+                                            ${{ item.total_price|floatformat:2 }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% endfor %}
+                            {% endfor %}
+                        </div>
                     {% endfor %}
                 {% endif %}
             </div>
         </div>
+    </div>
+    <div class="profile-info">
+        <h3 class="mb-4">Ordering data</h3>
+        <form class="profile-form" method="post">
+            {% csrf_token %}
+            <div class="form-blocks d-flex gap-1">
+                <div class="block1 d-flex flex-column gap-1">
+                    {{ form.first_name.label_tag }} {{ form.first_name }}<br>
+                    {{ form.last_name.label_tag }} {{ form.last_name }}<br>
+                    {{ form.middle_name.label_tag }} {{ form.middle_name }}<br>
+                    {{ form.city.label_tag }} {{ form.city }}<br>
+                    {{ form.street.label_tag }} {{ form.street }}<br>
+                    {{ form.house_number.label_tag }} {{ form.house_number }}<br>
+                    {{ form.apartment_number.label_tag }} {{ form.apartment_number }}<br>
+                    {{ form.postal_code.label_tag }} {{ form.postal_code }}<br>
+                </div>
+                <div class="block2 d-flex flex-column gap-1">
+                    {{ form.apartment_number.label_tag }} {{ form.apartment_number }}<br>
+                    {{ form.postal_code.label_tag }} {{ form.postal_code }}<br>
+                    <div class="image-block d-flex flex-column justify-content-center align-items-center">
+                        <p class="block-tag mt-4 text-center">The information will be used when placing an order.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-buttons">
+                <button class="default-btn profile-btn">Save</button>
+                <a href="{% url 'users:logout' %}" class="logout-btn d-flex align-items-center">
+                    Log out of your account
+                </a>
+            </div>
+        </form>
     </div>
 {% endblock content %}

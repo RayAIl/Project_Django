@@ -14,7 +14,7 @@ def register(request):
             return redirect('users:login')
     else:
         form = UserRegistrationForm()
-    
+
     return render(request, 'users/register.html', {'form': form})
 
 def user_login(request):
@@ -29,7 +29,7 @@ def user_login(request):
                 return redirect('main:catalog')
     else:
         form = UserLoginForm()
-    
+
     return render(request, 'users/login.html', {'form': form})
 
 @login_required(login_url="/users/login")
@@ -42,6 +42,7 @@ def profile(request):
     user = request.user
     if request.method == "POST":
         form = UserProfileForm(request.POST, instance=user)
+
         if form.is_valid():
             form.save()
             return redirect('users:profile')

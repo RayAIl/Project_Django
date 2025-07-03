@@ -15,16 +15,16 @@
     <body>
         <header class="header sticky-top d-flex align-items-center">
             <a class="header-logo" href="{% url 'main:catalog' %}">
-                <img src="{% static 'img/rev.png' %}" alt="Logo">
+                <img src="{% static 'img/rev.png' %}" alt="">
             </a>
-            <div class="search">
+            {% comment %} <div class="search">
                 <form action="" id="search_form" class="search_form d-flex" style="display: none;">
                     <input type="text" name="q" class="form_input" placeholder="Search">
                     <button type="submit" class="btnforsearch"></button>
                 </form>
-            </div>
+            </div> {% endcomment %}
             <div class="header-nav d-flex gap-4">
-                <a href="#" class="h-profile">
+                <a href="{% url 'users:profile' %}" class="h-profile">
                     <img src="{% static 'img/profile.png' %}" alt="Profile">
                 </a>
                 <a href="{% url 'cart:cart_detail' %}" class="h-profile">

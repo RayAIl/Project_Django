@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .forms import UserRegistrationForm, UserLoginForm, UserProfileForm
 from orders.models import Order
 
@@ -11,7 +12,10 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('users:login')
+            messages.success(request, 'Регистрация прошла успешно!')
+            return redirect('main:catalog')
+        else:
+            messages.error(request, 'Пожалуйста, исправьте ошибки в форме')
     else:
         form = UserRegistrationForm()
 
@@ -27,6 +31,10 @@ def user_login(request):
             if user is not None:
                 login(request, user)
                 return redirect('main:catalog')
+            else:
+                messages.error(request, 'Неверный email или пароль')
+        else:
+            messages.error(request, 'Пожалуйста, исправьте ошибки в форме')
     else:
         form = UserLoginForm()
 
@@ -35,20 +43,29 @@ def user_login(request):
 @login_required(login_url="/users/login")
 def user_logout(request):
     logout(request)
+    messages.info(request, 'Вы успешно вышли из системы')
     return redirect('users:login')
 
 @login_required(login_url="/users/login")
 def profile(request):
     user = request.user
-    if request.method == "POST":
-        form = UserProfileForm(request.POST, instance=user)
+    orders = Order.objects.filter(user=user).order_by('-created_at')
 
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, user=user, instance=user)
+        
         if form.is_valid():
-            form.save()
+            user = form.save(commit=False)
+            user.first_name = form.cleaned_data['first_name']
+            user.last_name = form.cleaned_data['last_name']
+            user.save()
+            
+            messages.success(request, 'Профиль успешно обновлен')
             return redirect('users:profile')
+        else:
+            messages.error(request, 'Пожалуйста, исправьте ошибки')
     else:
-        form = UserProfileForm(user=user)
-    orders = Order.objects.filter(user=user)
+        form = UserProfileForm(user=user, instance=user)
 
     return render(request, 'users/profile.html', {
         'form': form,

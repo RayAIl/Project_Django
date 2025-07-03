@@ -1,6 +1,7 @@
 .venv/
 .idea/
 .mypy_cache/
+.ropeproject/
 __pychache__/
 migrations/
 app/__pycache__/

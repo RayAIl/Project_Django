@@ -5,8 +5,10 @@ from django.contrib import messages
 from .forms import UserRegistrationForm, UserLoginForm, UserProfileForm
 from orders.models import Order
 
-
 def register(request):
+    if request.user.is_authenticated:
+        return redirect('main:catalog')
+
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
@@ -22,6 +24,9 @@ def register(request):
     return render(request, 'users/register.html', {'form': form})
 
 def user_login(request):
+    if request.user.is_authenticated:
+        return redirect('main:catalog')
+
     if request.method == 'POST':
         form = UserLoginForm(data=request.POST)
         if form.is_valid():
@@ -52,20 +57,16 @@ def profile(request):
     orders = Order.objects.filter(user=user).order_by('-created_at')
 
     if request.method == "POST":
-        form = UserProfileForm(request.POST, user=user, instance=user)
-        
+        form = UserProfileForm(request.POST, instance=user)
+
         if form.is_valid():
-            user = form.save(commit=False)
-            user.first_name = form.cleaned_data['first_name']
-            user.last_name = form.cleaned_data['last_name']
-            user.save()
-            
+            form.save()
             messages.success(request, 'Профиль успешно обновлен')
             return redirect('users:profile')
         else:
             messages.error(request, 'Пожалуйста, исправьте ошибки')
     else:
-        form = UserProfileForm(user=user, instance=user)
+        form = UserProfileForm(instance=user)
 
     return render(request, 'users/profile.html', {
         'form': form,

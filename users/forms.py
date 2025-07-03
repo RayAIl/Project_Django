@@ -1,3 +1,4 @@
+from curses.ascii import isdigit
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
 from .models import User
@@ -12,13 +13,16 @@ class UserRegistrationForm(UserCreationForm):
         if password1 and len(password1) < 8:
             self.add_error('password1', 'Minimum 8 characters!')
         return password1
-    
+
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')
         password2 = self.cleaned_data.get('password2')
 
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Пароли не совпадают")
+
         return password2
-    
+
 class UserLoginForm(AuthenticationForm):
     class Meta:
         model = User
@@ -30,6 +34,5 @@ class UserProfileForm(forms.ModelForm):
         fields = [
             'first_name', 'last_name', 'middle_name',
             'city', 'street', 'house_number',
-            'postal_code',
-            'apartment_number',
+            'postal_code', 'apartment_number',
         ]

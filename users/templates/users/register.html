@@ -5,22 +5,55 @@
 
 {% block content %}
     <div class="login-container d-flex justify-content-center">
-        <div class="login d-flex flex-column">
-            <h3 class="text-center mb-3">Registration</h3>
-            <from method="post" class="loginform">
-                {% csrf_token %}
-                {% for field in form %}
-                    <div class="form-group mb-3 d-flex flex-column">
-                        {{ field.label_tag }}
-                        {{ field }}
-                        {% if field.errors %}<div class="error">{{ field.errors }}</div>{% endif %}
-                    </div>
-                {% endfor %}
-                <div class="loginbtns d-flex justify-content-between align-items-center">
-                    <button class="default-btn mt-3">Register</button>
-                    <a href="{% url 'users:login' %}" class="create-account-btn">Have account</a>
+        <div class="login d-flex flex-column w-100" style="max-width: 500px;">
+            <h3 class="text-center mb-4">Create Account</h3>
+            
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
                 </div>
-            </from>
+            {% endif %}
+            
+            <form method="post" class="loginform">
+                {% csrf_token %}
+                
+                <div class="form-group mb-3">
+                    <label for="id_email">Email Address</label>
+                    <input type="email" name="email" id="id_email" class="form-control" 
+                           placeholder="Enter your email" required>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="id_password1">Password</label>
+                        <input type="password" name="password1" id="id_password1" class="form-control" 
+                               placeholder="Create password" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="id_password2">Confirm Password</label>
+                        <input type="password" name="password2" id="id_password2" class="form-control" 
+                               placeholder="Repeat password" required>
+                    </div>
+                </div>
+                
+                <div class="form-check mb-4">
+                    <input class="form-check-input" type="checkbox" id="terms" required>
+                    <label class="form-check-label" for="terms">
+                        I agree to the <a href="#">Terms & Conditions</a>
+                    </label>
+                </div>
+                
+                <div class="loginbtns d-flex justify-content-between align-items-center">
+                    <button class="default-btn">Create Account</button>
+                    <a href="{% url 'users:login' %}" class="create-account-btn">Already have account?</a>
+                </div>
+            </form>
         </div>
     </div>
 {% endblock content %}

@@ -4,78 +4,141 @@
 {% block title %}Reverence Interlude - Profile{% endblock title %}
 
 {% block content %}
-    <h1 class="text-center mb-5">Order history</h1>
-    <div class="profile d-flex flex-column gap-4 justify-content-center">
-        <div class="profile-history">
-            <div class="table-head d-flex justify-content-between align-items-center">
-                <div class="left-side-head">
-                    <p class="table-p">Product</p>
-                </div>
-                <div class="right-side-head d-flex gap-3">
-                    <p class="table-p c-item-total">Product</p>
-                    <p class="table-p c-item-quantity">Quantity</p>
-                    <p class="table-p c-item-price">Total</p>
-                </div>
-            </div>
-            <div class="table-items">
-                {% if order|length == 0 %}
-                    <div class="empty-orders-message text-center">
-                        <h3 class="mt-5">You have no orders.</h3>
+<div class="container mt-5">
+    <div class="row">
+        <!-- Блок истории заказов -->
+        <div class="col-md-7">
+            <h1 class="text-center mb-5">Order history</h1>
+            <div class="profile-history">
+                {% if orders|length == 0 %}
+                    <div class="empty-orders-message text-center py-5">
+                        <h3 class="mt-5">You have no orders yet.</h3>
+                        <a href="{% url 'main:catalog' %}" class="default-btn mt-3">Browse Catalog</a>
                     </div>
                 {% else %}
                     {% for order in orders %}
-                        <div class="order">
-                            Order №{{ order.id }}
-                            {% for item in order.items.all %}
-                                <div class="order-item d-flex justify-content-between align-items-center">
-                                    <div class="left-side-items d-flex">
-                                        <div class="c-item-img">
-                                            <img src="{{ item.clothing_item.image.url }}" alt="">
-                                        </div>
-                                        <div class="c-item-quantity">
-                                            1
-                                        </div>
-                                        <div class="c-item-total">
-                                            ${{ item.total_price|floatformat:2 }}
-                                        </div>
-                                    </div>
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5>Order #{{ order.id }} - {{ order.created_at|date:"M d, Y" }}</h5>
+                                <p class="mb-0">Total: ${{ order.get_total_cost|floatformat:2 }}</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Product</th>
+                                                <th>Size</th>
+                                                <th>Qty</th>
+                                                <th>Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in order.items.all %}
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="{{ item.clothing_item.image.url }}" 
+                                                             alt="{{ item.clothing_item.name }}" 
+                                                             width="60" class="me-3">
+                                                        <span>{{ item.clothing_item.name }}</span>
+                                                    </div>
+                                                </td>
+                                                <td>{{ item.size.name }}</td>
+                                                <td>{{ item.quantity }}</td>
+                                                <td>${{ item.total_price|floatformat:2 }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
                                 </div>
-                            {% endfor %}
+                            </div>
                         </div>
                     {% endfor %}
                 {% endif %}
             </div>
         </div>
-    </div>
-    <div class="profile-info">
-        <h3 class="mb-4">Ordering data</h3>
-        <form class="profile-form" method="post">
-            {% csrf_token %}
-            <div class="form-blocks d-flex gap-1">
-                <div class="block1 d-flex flex-column gap-1">
-                    {{ form.first_name.label_tag }} {{ form.first_name }}<br>
-                    {{ form.last_name.label_tag }} {{ form.last_name }}<br>
-                    {{ form.middle_name.label_tag }} {{ form.middle_name }}<br>
-                    {{ form.city.label_tag }} {{ form.city }}<br>
-                    {{ form.street.label_tag }} {{ form.street }}<br>
-                    {{ form.house_number.label_tag }} {{ form.house_number }}<br>
-                    {{ form.apartment_number.label_tag }} {{ form.apartment_number }}<br>
-                    {{ form.postal_code.label_tag }} {{ form.postal_code }}<br>
+        
+        <!-- Блок информации профиля -->
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Profile Information</h3>
                 </div>
-                <div class="block2 d-flex flex-column gap-1">
-                    {{ form.apartment_number.label_tag }} {{ form.apartment_number }}<br>
-                    {{ form.postal_code.label_tag }} {{ form.postal_code }}<br>
-                    <div class="image-block d-flex flex-column justify-content-center align-items-center">
-                        <p class="block-tag mt-4 text-center">The information will be used when placing an order.</p>
-                    </div>
+                <div class="card-body">
+                    <form class="profile-form" method="post">
+                        {% csrf_token %}
+                        
+                        {% if form.errors %}
+                            <div class="alert alert-danger">
+                                <ul>
+                                    {% for field, errors in form.errors.items %}
+                                        {% for error in errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                {{ form.first_name.label_tag }}
+                                {{ form.first_name }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.last_name.label_tag }}
+                                {{ form.last_name }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.middle_name.label_tag }}
+                                {{ form.middle_name }}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.email.label_tag }}
+                            <input type="email" value="{{ user.email }}" class="form-control" disabled>
+                            <small class="text-muted">Contact us to change your email</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            {{ form.city.label_tag }}
+                            {{ form.city }}
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                {{ form.street.label_tag }}
+                                {{ form.street }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.house_number.label_tag }}
+                                {{ form.house_number }}
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                {{ form.apartment_number.label_tag }}
+                                {{ form.apartment_number }}
+                            </div>
+                            <div class="col-md-4">
+                                {{ form.postal_code.label_tag }}
+                                {{ form.postal_code }}
+                            </div>
+                        </div>
+                        
+                        <div class="profile-buttons d-flex justify-content-between">
+                            <button class="default-btn">Save Changes</button>
+                            <a href="{% url 'users:logout' %}" class="btn btn-outline-danger">
+                                Log Out
+                            </a>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div class="profile-buttons">
-                <button class="default-btn profile-btn">Save</button>
-                <a href="{% url 'users:logout' %}" class="logout-btn d-flex align-items-center">
-                    Log out of your account
-                </a>
-            </div>
-        </form>
+        </div>
     </div>
+</div>
 {% endblock content %}

@@ -1,7 +1,6 @@
 from django.conf import settings
 from main.models import ClothingItem, ClothingItemSize, Size
 
-
 class Cart:
     def __init__(self, request):
         self.session = request.session
@@ -16,19 +15,19 @@ class Cart:
 
     def add(self, clothing_item, size, quantity=1, replace_quantity=False):
         item_key = self.generate_item_key(clothing_item.id, size)
-        
+
         # Проверка доступности размера
         try:
             size_obj = Size.objects.get(name=size)
             item_size = ClothingItemSize.objects.get(
-                clothing_item=clothing_item, 
+                clothing_item=clothing_item,
                 size=size_obj
             )
             if not item_size.available:
                 return False
         except (Size.DoesNotExist, ClothingItemSize.DoesNotExist):
             return False
-        
+
         if item_key in self.cart:
             if replace_quantity:
                 self.cart[item_key]['quantity'] = quantity
@@ -40,11 +39,11 @@ class Cart:
                 'size': size,
                 'quantity': quantity
             }
-        
+
         # Ограничение количества по доступному на складе
         if self.cart[item_key]['quantity'] > item_size.stock_quantity:
             self.cart[item_key]['quantity'] = item_size.stock_quantity
-        
+
         self.save()
         return True
 
@@ -65,14 +64,14 @@ class Cart:
             try:
                 size_obj = Size.objects.get(name=size)
                 item_size = ClothingItemSize.objects.get(
-                    clothing_item=clothing_item, 
+                    clothing_item=clothing_item,
                     size=size_obj
                 )
                 if quantity > item_size.stock_quantity:
                     quantity = item_size.stock_quantity
             except (Size.DoesNotExist, ClothingItemSize.DoesNotExist):
                 pass
-            
+
             self.cart[item_key]['quantity'] = quantity
             self.save()
         elif quantity <= 0:
@@ -93,10 +92,10 @@ class Cart:
         clothing_item_ids = [item['clothing_item_id'] for item in self.cart.values()]
         clothing_items = ClothingItem.objects.filter(id__in=clothing_item_ids)
         clothing_items_dict = {item.id: item for item in clothing_items}
-        
+
         # Создаем копию корзины для итерации
         cart = self.cart.copy()
-        
+
         for item_key, item_data in cart.items():
             clothing_item_id = item_data['clothing_item_id']
             if clothing_item_id in clothing_items_dict:
@@ -104,19 +103,19 @@ class Cart:
                 quantity = item_data['quantity']
                 size = item_data['size']
                 total_price = clothing_item.get_price_with_discount() * quantity
-                
+
                 # Получаем доступное количество для данного товара и размера
                 max_quantity = 99  # значение по умолчанию
                 try:
                     size_obj = Size.objects.get(name=size)
                     item_size = ClothingItemSize.objects.get(
-                        clothing_item=clothing_item, 
+                        clothing_item=clothing_item,
                         size=size_obj
                     )
                     max_quantity = item_size.stock_quantity
                 except (Size.DoesNotExist, ClothingItemSize.DoesNotExist):
                     pass
-                
+
                 yield {
                     'item_key': item_key,
                     'item': clothing_item,

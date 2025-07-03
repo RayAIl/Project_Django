@@ -18,14 +18,14 @@
         <script>
             const images = document.querySelectorAll('.detail-image');
             const prevBtn = document.querySelector('.prev-btn');
-            const prevBtn = document.querySelector('.next-btn');
+            const nextBtn = document.querySelector('.next-btn');
             
             let currentIndex = 0;
             
             if (images.length > 0){
                 images[currentIndex].style.display = 'block';
 
-                if (images === 1) {
+                if (images.length === 1) {
                     prevBtn.style.display = 'none';
                     nextBtn.style.display = 'none';
                 } else {
@@ -37,7 +37,7 @@
 
                     nextBtn.addEventListener('click', () => {
                         images[currentIndex].style.display = 'none';
-                        currentIndex = (currentIndex - 1) % images.length;
+                        currentIndex = (currentIndex + 1) % images.length;
                         images[currentIndex].style.display = 'block';
                     });
                 }
@@ -71,7 +71,7 @@
                 </p>
             {% endif %}
             <div class="detail-cart-form">
-                <form action="{{% url 'cart:cart_add' clothing_item.id %}}" method="post">
+                <form action="{% url 'cart:cart_add' clothing_item.id %}" method="post">
                     {% csrf_token %}
                     <div class="select-size d-flex gap-2">
                         <label for="size">Size:</label>

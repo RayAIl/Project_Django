@@ -26,7 +26,7 @@ class Cart:
         if item_id in self.cart:
             del self.cart[item_id]
             self.save()
-    
+
     def get_total_price(self):
         total = 0
 
@@ -37,16 +37,16 @@ class Cart:
             except ClothingItem.DoesNotExist:
                 continue
         return total
-    
+
     def __iter__(self):
         item_ids = self.cart.keys()
-        items = ClothingItem.objects.filter(id_in=item_ids)
-        
+        items = ClothingItem.objects.filter(id__in=item_ids)
+
         for item in items:
             total_price = item.get_price_with_discount()
             quantity = self.cart[str(item.id)]['quantity']
             yield{'item': item, 'quantity': quantity, 'size': self.cart[str(item.id)]['size'], 'total_price': total_price * quantity}
-    
+
     def __len__(self):
         return sum(item['quantity'] for item in self.cart.values())
 

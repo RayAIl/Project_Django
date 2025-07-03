@@ -7,7 +7,7 @@ class Size(models.Model):
 
     def __str__(self):
         return self.name
-    
+
 class Category(models.Model):
     name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(unique=True)
@@ -60,4 +60,3 @@ class ItemImage(models.Model):
 
     def __str__(self):
         return f"{self.product.name} - {self.image.name}"
-    

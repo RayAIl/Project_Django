@@ -10,9 +10,9 @@
             <h4 class="price-head">Price Range:</h4>
             <div class="price-range d-flex justify-content-between">
                 <input type="number" name="min_price" id="min_price" placeholder="Min Price" 
-                       value="{{ request.GET.min_price }}" oninput="">
+                    value="{{ request.GET.min_price }}" oninput="">
                 <input type="number" name="max_price" id="max_price" placeholder="Max Price" 
-                       value="{{ request.GET.max_price }}" oninput="">
+                    value="{{ request.GET.max_price }}" oninput="">
             </div>
             <h4 class="category-head">Category:</h4>
             {% for category in categories %}

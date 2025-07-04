@@ -17,13 +17,14 @@ RUN apt-get update && \
 
 # Копируем зависимости отдельно для кэширования
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Копируем проект
 COPY . .
 
 # Создаем директории для статики
-RUN mkdir -p /app/app/static/upload && \
+RUN mkdir -p /app/static/upload && \
     python manage.py collectstatic --noinput
 
 # Оптимизация для Django

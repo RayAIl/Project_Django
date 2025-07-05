@@ -10,3 +10,4 @@ cart/__pycache__/
 users/__pycache__/
 orders/__pycache__/
 media/
+.dockerignore

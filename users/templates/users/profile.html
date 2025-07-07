@@ -33,7 +33,8 @@
                                             <img src="{{ item.clothing_item.image.url }}" alt="">
                                         </div>
                                         <div class="c-item-info">
-                                            <a href="{% url "main:clothing_item_detail" item.clothing_item.slug %}" class="item-name-in-cart p-3">{{ item.item.name }}</a>
+                                            <a href="{% url "main:clothing_item_detail" item.clothing_item.slug %}"
+                                                class="item-name-in-cart p-3">{{ item.item.name }}</a>
                                             <p class="item-size-bottom fw-bold p-3">{{ item.size }}</p>
                                         </div>
                                     </div>

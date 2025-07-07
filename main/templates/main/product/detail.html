@@ -7,7 +7,8 @@
     <div class="detail-product d-flex">
         <div class="detail-img d-flex justify-content-center">
             {% for image in clothing_item.images.all %}
-                <img src="{{ image.image.url }}" style="display: none;" alt="{{ clothing_item.name }}" class="detail-image" data-index="{{ forloop.counter0 }}">
+                <img src="{{ image.image.url }}" style="display: none;"
+                    alt="{{ clothing_item.name }}" class="detail-image" data-index="{{ forloop.counter0 }}">
             {% endfor %}
             <div class="image-nav d-flex justify-content-between">
                 <buttton class="prev-btn">&lsaquo;</buttton>
@@ -22,7 +23,8 @@
                 <p>Available sizes:
                     <ul class="sizes-list d-flex gap-3">
                         {% for item_size in available_sizes %}
-                            <li class="size-name d-flex justify-content-center align-items-center" data-size="{{ item_size.size.name }}">
+                            <li class="size-name d-flex justify-content-center align-items-center"
+                                data-size="{{ item_size.size.name }}">
                                 {{ item_size.size.name }}
                             </li>
                         {% empty %}

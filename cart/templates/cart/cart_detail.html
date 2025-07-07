@@ -30,7 +30,9 @@
                                 <img src="{{ item.item.image.url }}" alt="">
                             </div>
                             <div class="c-item-info">
-                                <a href="{% url "main:clothing_item_detail" item.item.slug %}" class="item-name-in-cart p-3">{{ item.item.name }}</a>
+                                <a href="{% url "main:clothing_item_detail" item.item.slug %}"
+                                    class="item-name-in-cart p-3">{{ item.item.name }}
+                                </a>
                                 <p class="item-size-bottom fw-bold p-3">{{ item.size }}</p>
                             </div>
                         </div>
@@ -39,9 +41,11 @@
                                 ${{ item.total_price|floatformat:2 }}
                             </div>
                             <div class="c-item-quantity">
-                                <form action="{% url "cart:cart_update" item.item.id %}" id="update-form-{{ item.item.id }}" method="post" class="c-quantity-form">
+                                <form action="{% url "cart:cart_update" item.item.id %}"
+                                    id="update-form-{{ item.item.id }}" method="post" class="c-quantity-form">
                                     {% csrf_token %}
-                                    <input type="number" class="text-center" name="quantity" value="{{ item.quantity }}" min="1" required id="quantity-{{ item.item.id }}" oninput="updateCart({{ item.item.id }})">
+                                    <input type="number" class="text-center" name="quantity" value="{{ item.quantity }}"
+                                        min="1" required id="quantity-{{ item.item.id }}" oninput="updateCart({{ item.item.id }})">
                                     <a href="{% url "cart:cart_remove" item.item.id %}">Remove</a>
                                 </form>
                             </div>
